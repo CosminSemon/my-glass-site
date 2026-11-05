@@ -1,44 +1,287 @@
-body {
+* {
+  box-sizing: border-box;
   margin: 0;
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  background: radial-gradient(circle at 20% 20%, #4f46e5 0%, transparent 40%),
-              radial-gradient(circle at 80% 80%, #ec4899 0%, transparent 40%),
-              #0b0f19;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
   color: #ffffff;
 }
 
-.container {
+/* Base Viewport Container with Dynamic Mobile Sizing */
+.viewport {
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport prevents iOS Safari toolbar clipping */
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition: background 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: env(safe-area-inset-top, 16px) env(safe-area-inset-right, 16px) env(safe-area-inset-bottom, 16px) env(safe-area-inset-left, 16px);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
 }
 
-.glass-card {
+/* Floating Ambient Glow Orbs for Glass Refraction */
+.ambient-sphere {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+.orb-1 {
+  width: 260px;
+  height: 260px;
+  background: #38bdf8;
+  top: 10%;
+  left: 15%;
+  animation: floatOrb 8s ease-in-out infinite alternate;
+}
+
+.orb-2 {
   width: 320px;
-  padding: 2rem;
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
+  height: 320px;
+  background: #ec4899;
+  bottom: 12%;
+  right: 15%;
+  animation: floatOrb 10s ease-in-out infinite alternate-reverse;
 }
 
-.row {
+@keyframes floatOrb {
+  0% { transform: translateY(0px) scale(1); }
+  100% { transform: translateY(35px) scale(1.15); }
+}
+
+/* Responsive Dashboard Grid Layout */
+.dashboard-grid {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 760px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+/* Glass Panels */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 24px;
+  padding: 1.5rem;
+  box-shadow: 
+    0 16px 36px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+/* Header */
+.header-panel {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.buttons {
+.header-meta h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.live-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #34d399;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+
+.theme-pill {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.theme-pill:active {
+  transform: scale(0.95);
+}
+
+/* Music Panel */
+.music-panel {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.music-cover {
+  width: 90px;
+  height: 90px;
+  min-width: 90px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.album-art {
+  font-size: 2.8rem;
+  user-select: none;
+}
+
+.spinning {
+  animation: spin 5s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.music-details {
+  flex: 1;
+}
+
+.track-tag {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.8px;
+}
+
+.music-details h3 {
+  font-size: 1.2rem;
+  margin-top: 2px;
+}
+
+.music-details p {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.75rem;
+}
+
+.progress-bar-container {
+  height: 5px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: #ffffff;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.music-controls {
+  display: flex;
+  gap: 0.6rem;
+}
+
+/* Toggles Panel */
+.toggles-panel h3 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.toggle-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.label-with-sub span {
+  display: block;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.label-with-sub small {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.78rem;
+}
+
+/* Slider Panel */
+.slider-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 0.85rem;
+}
+
+.slider-value {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.custom-range {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  outline: none;
+  accent-color: #ffffff;
+  cursor: pointer;
+  margin-bottom: 1.25rem;
+}
+
+.button-actions {
   display: flex;
   gap: 0.75rem;
-  margin-top: 0.5rem;
+}
+
+/* Tablet & Desktop Layouts */
+@media (min-width: 640px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .header-panel {
+    grid-column: 1 / -1;
+  }
+
+  .music-panel {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Landscape Mode on Smartphones */
+@media (max-height: 500px) and (orientation: landscape) {
+  .viewport {
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .header-panel, .music-panel {
+    grid-column: 1 / -1;
+  }
 }
